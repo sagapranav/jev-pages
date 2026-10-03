@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# large media, kept out of the repo
+demo/
+*-gallery.png
