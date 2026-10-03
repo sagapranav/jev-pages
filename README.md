@@ -2,6 +2,12 @@
 
 Type a few lines about your product and a landing page designs itself as you write.
 
+
+
+https://github.com/user-attachments/assets/4b662ea9-fbaa-4050-b938-84f207770b9a
+
+
+
 Jev never writes text. It only picks between options: what your notes are about, what the page should say, and one choice for each layer of the design. Code builds the page from those picks.
 
 ![How Jev Pages works](docs/how-it-works.png)
