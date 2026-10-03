@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Jev Pages server: serves jev-pages.html and relays its calls to the Jev API.
+"""Jev Pages server: serves jev-pages.html and its data files, and relays its calls to the Jev API.
 
 The Jev API refuses requests made directly from a web page, so the page sends
 them to /relay here and this script forwards them.
@@ -22,16 +22,21 @@ import webbrowser
 from urllib.parse import urlparse
 
 PORT = int(os.environ.get("JEV_PORT", "8787"))  # keep this fixed: the saved key is tied to it
-PAGE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "jev-pages.html")
+HERE = os.path.dirname(os.path.abspath(__file__))
+PAGE = os.path.join(HERE, "jev-pages.html")
 ALLOWED_HOSTS = {"api.typesafe.ai", "thejevai.com"}
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?", 1)[0]
+        data = os.path.join(HERE, "data", os.path.basename(path))  # basename only, so no path tricks
         if path in ("/", "/index.html", "/jev-pages.html"):
             with open(PAGE, "rb") as f:
                 self._send(200, f.read(), "text/html; charset=utf-8")
+        elif path.startswith("/data/") and path.endswith(".js") and os.path.isfile(data):
+            with open(data, "rb") as f:
+                self._send(200, f.read(), "text/javascript; charset=utf-8")
         elif path == "/relay/health":
             self._send(200, b'{"ok":true}', "application/json")
         else:
